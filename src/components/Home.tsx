@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import Process from "./Process";
 
 const Home: React.FC = () => {
+  // States
   const [fileName, setFileName] = useState("");
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [isContinuePressed, setIsContinuePressed] = useState(false);
+  // Add new state for the selected file
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const displayFileName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      setFileName(selectedFile.name);
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
       setIsFileSelected(true);
+      setSelectedFile(file);
     } else {
       setFileName("");
       setIsFileSelected(false);
+      setSelectedFile(null);
     }
   };
 
@@ -30,7 +35,7 @@ const Home: React.FC = () => {
   };
 
   if (isFileSelected && isContinuePressed) {
-    return <Process />;
+    return <Process selectedFile={selectedFile} />;
   }
   return (
     <>

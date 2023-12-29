@@ -1,6 +1,10 @@
 import React from "react";
 
-const Process: React.FC = () => {
+interface ProcessProps {
+  selectedFile: File | null;
+}
+
+const Process: React.FC<ProcessProps> = ({ selectedFile }) => {
   // PROCESSING LOGIC
 
   return (
@@ -8,7 +12,22 @@ const Process: React.FC = () => {
       <h1 className="text-center">Modify your track!</h1>
 
       {/* DISPLAY FILE NAME */}
-      <div className="text-center mt-3" id="selectedFileName"></div>
+      <div className="text-center mt-3" id="selectedFileName">
+        {selectedFile?.name}
+      </div>
+
+      {/* AUDIO PLAYER */}
+      {selectedFile && (
+        <div className="text-center mt-3">
+          <audio controls>
+            <source
+              src={URL.createObjectURL(selectedFile)}
+              type={selectedFile.type}
+            />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      )}
     </div>
   );
 };
