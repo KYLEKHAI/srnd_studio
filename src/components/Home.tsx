@@ -1,20 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import Process from "./Process";
 
-const Home = () => {
-  //
+const Home: React.FC = () => {
+  const [fileName, setFileName] = useState("");
+  const [isFileSelected, setIsFileSelected] = useState(false);
+  const [isContinuePressed, setIsContinuePressed] = useState(false);
 
-  /*
-  const displayFileName = (event) => {
-    // Handle file selection logic here
-    // For example:
-    console.log(event.target.files[0].name);
+  const displayFileName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFileName(selectedFile.name);
+      setIsFileSelected(true);
+    } else {
+      setFileName("");
+      setIsFileSelected(false);
+    }
   };
 
   const redirectToProcess = () => {
-    // Handle redirection logic here
-  };
-  */
+    const fileInput = document.getElementById(
+      "audioFileInput"
+    ) as HTMLInputElement;
 
+    if (fileInput?.files?.length && fileInput.files.length > 0) {
+      setIsContinuePressed(true);
+    } else {
+      alert("Please choose a file to be processed.");
+    }
+  };
+
+  if (isFileSelected && isContinuePressed) {
+    return <Process />;
+  }
   return (
     <>
       {/* NAVBAR */}
@@ -38,9 +55,12 @@ const Home = () => {
               id="audioFileInput"
               accept=".mp3, .wav"
               style={{ display: "none" }}
-              //onChange={displayFileName}
+              onChange={displayFileName}
             />
           </label>
+
+          {/* DISPLAY FILE NAME */}
+          <p>{fileName}</p>
         </form>
       </div>
 
@@ -49,7 +69,7 @@ const Home = () => {
         <button
           type="button"
           className="btn btn-success"
-          //onClick={redirectToProcess}
+          onClick={redirectToProcess}
         >
           Continue
         </button>
